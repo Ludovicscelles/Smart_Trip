@@ -1,0 +1,42 @@
+*.iml
+/.idea/caches/
+/.idea/libraries/
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/shelf/
+/.idea/deploymentTargetSelector.xml
+
+
+
+# Gradle
+.gradle/
+**/build/
+
+# Configuratin locale
+local.properties
+**/local.properties
+
+# Fichier système
+.DS_Store
+Thumbs.db
+
+# Android
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Fichiers temporaires
+*.log
+*.tmp
+
+# Fichiers sensibles
+*.jks
+*.keystore
+*.hprof
+
+# Clés et secrets
+.env
+.env.*
+secrets.properties
