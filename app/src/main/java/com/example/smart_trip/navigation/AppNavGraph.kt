@@ -1,12 +1,14 @@
+
 package com.example.smart_trip.navigation
 
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,32 +21,36 @@ import com.example.smart_trip.ui.screens.add_a_trip.AddATripScreen
 
 @Composable
 fun AppNavGraph() {
+
     val navController = rememberNavController()
 
+    // Route actuellement affichée
     val navBackStackEntry by
-        navController.currentBackStackEntryAsState()
+    navController.currentBackStackEntryAsState()
 
-    val currentRoute =
-        navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route
 
+    // Masquer le footer sur l'introduction
     val showFooter =
         currentRoute != null && currentRoute != "intro"
 
+    // Onglet sélectionné dans le footer
     val selectedItem = when (currentRoute) {
         "home" -> 0
-        "voyages" -> 1
+        "voyages", "allTrips", "newTrip" -> 1
         "parametres" -> 2
-        "newTrip" -> 1
         else -> -1
     }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+
         bottomBar = {
             if (showFooter) {
                 SmartTripFooter(
                     selectedItem = selectedItem,
                     onItemSelected = { index ->
+
                         val route = when (index) {
                             0 -> "home"
                             1 -> "voyages"
@@ -60,7 +66,6 @@ fun AppNavGraph() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-
                         }
                     }
                 )
@@ -73,6 +78,8 @@ fun AppNavGraph() {
             startDestination = "intro",
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            // INTRODUCTION
             composable("intro") {
                 IntroScreen(
                     onMesVoyagesClick = {
@@ -81,34 +88,35 @@ fun AppNavGraph() {
                                 inclusive = true
                             }
                         }
-
-                    },
-
-
-                )
-
-            }
-
-            composable("home") {
-                HomeScreen(
-                    onBackCLick = {
-                        navController.popBackStack()
-                    },
-                    onAddATrip = {
-                        navController.navigate("newTrip")
                     }
                 )
             }
 
-            composable ( "voyages" ) {
-                Text("Page Voyages")
+            // ACCUEIL
+            composable("home") {
+                HomeScreen(
+                    onAddATrip = {
+                        navController.navigate("newTrip")
+                    },
+                    onAddPlace = {
+                        navController.navigate("newPlace")
+                    },
+                    onAddExpense = {
+                        navController.navigate("newExpense")
+                    },
+                    onAddPhoto = {
+                        navController.navigate("newPhoto")
+                    },
+                    onViewAllTrips = {
+                        navController.navigate("allTrips")
+                    },
+                    onViewWeather = {
+                        navController.navigate("weather")
+                    }
+                )
             }
 
-            composable ( "parametres" ) {
-                Text("Page paramètres")
-            }
-
-
+            // CRÉER UN VOYAGE
             composable("newTrip") {
 
                 var destination by rememberSaveable {
@@ -130,16 +138,44 @@ fun AppNavGraph() {
                     },
                     onSubmit = {
                         navController.popBackStack()
-                    },
+                    }
+                )
+            }
 
-                    )
+            // AJOUTER UN LIEU
+            composable("newPlace") {
+                Text("Ajouter un lieu")
+            }
 
+            // AJOUTER UNE DÉPENSE
+            composable("newExpense") {
+                Text("Ajouter une dépense")
+            }
+
+            // AJOUTER UNE PHOTO
+            composable("newPhoto") {
+                Text("Ajouter une photo")
+            }
+
+            // LISTE DES VOYAGES
+            composable("allTrips") {
+                Text("Tous mes voyages")
+            }
+
+            // MÉTÉO
+            composable("weather") {
+                Text("Météo")
+            }
+
+            // ONGLET VOYAGES
+            composable("voyages") {
+                Text("Page Voyages")
+            }
+
+            // ONGLET PARAMÈTRES
+            composable("parametres") {
+                Text("Page paramètres")
             }
         }
     }
-
-    }
-
-
-
-
+}
