@@ -2,6 +2,7 @@ package com.example.smart_trip
 
 import com.example.smart_trip.R
 import androidx.compose.foundation.Image
+import com.example.smart_trip.components.SmartTripFooter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.layout.size
@@ -53,50 +54,47 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun IntroScreen(
-    onMesVoyagesClick: () -> Unit
+    onMesVoyagesClick: () -> Unit,
 ) {
-    Scaffold { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(PaleGray)
-                .padding(innerPadding)
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PaleGray)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(
+                            id = R.drawable.logo_smarttrip
+                        ),
+                        contentDescription = "Logo SmartTrip",
+                        modifier = Modifier.size(300.dp),
+                        contentScale = ContentScale.Fit
+                    )
 
-        ) {
-            Image(
-                painter = painterResource(
-                    id = R.drawable.logo_smarttrip
-                ),
-                contentDescription = "Logo SmartTrip",
-                modifier = Modifier.size(300.dp),
-                contentScale = ContentScale.Fit
-            )
+                    Spacer(modifier = Modifier.height(24.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
+                    Button(
+                        onClick = onMesVoyagesClick,
+                        modifier = Modifier
+                            .height(65.dp)
+                            .width(280.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Turquoise,
+                            contentColor = Color.White
+                        )
 
-            Button(
-                onClick = onMesVoyagesClick,
-                modifier = Modifier
-                    .height(65.dp)
-                    .width(280.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Turquoise,
-                    contentColor = Color.White
-                )
+                    ) {
+                        Text(
+                            text =  "Allez sur l'application",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    }
 
-            ) {
-                Text(
-                    text =  "Allez sur l'application",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
+                }
+
             }
 
-        }
 
-    }
-
-}
