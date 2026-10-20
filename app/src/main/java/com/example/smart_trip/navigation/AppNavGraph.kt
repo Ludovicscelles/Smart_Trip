@@ -26,6 +26,7 @@ fun AppNavGraph() {
 
         }
 
+<<<<<<< Updated upstream
         composable("home") {
             HomeScreen(
                 onBackCLick = {
@@ -36,6 +37,60 @@ fun AppNavGraph() {
                 }
             )
         }
+=======
+        NavHost(
+            navController = navController,
+            startDestination = "intro",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("intro") {
+                IntroScreen(
+                    onMesVoyagesClick = {
+                        navController.navigate("home") {
+                            popUpTo("intro") {
+                                inclusive = true
+                            }
+                        }
+
+                    },
+
+
+                )
+
+            }
+
+            composable("home") {
+                HomeScreen(
+                    onAddATrip = {
+                        navController.navigate("newTrip")
+                    },
+                    onAddPlace = {
+                        navController.navigate("newPlace")
+                    },
+                    onAddExpense = {
+                        navController.navigate("newExpense")
+                    },
+                    onAddPhoto = {
+                        navController.navigate("newPhoto")
+                    },
+                    onViewAllTrips = {
+                        navController.navigate("allTrips")
+                    },
+                    onViewWeather = {
+                        navController.navigate("weather")
+                    }
+
+                )
+            }
+
+            composable ( "voyages" ) {
+                Text("Page Voyages")
+            }
+
+            composable ( "parametres" ) {
+                Text("Page paramètres")
+            }
+>>>>>>> Stashed changes
 
 
             composable("newTrip") {

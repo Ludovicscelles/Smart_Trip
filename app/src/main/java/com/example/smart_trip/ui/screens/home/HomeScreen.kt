@@ -24,9 +24,6 @@ import com.example.smart_trip.ui.theme.PaleGray
 import com.example.smart_trip.ui.theme.PaleBlue
 import com.example.smart_trip.ui.theme.BrightBlue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BusinessCenter
-import androidx.compose.material.icons.filled.LocationOff
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.WorkOutline
@@ -39,8 +36,12 @@ import com.example.smart_trip.ui.theme.PaleBlue2
 
 @Composable
 fun HomeScreen(
-    onBackCLick: () -> Unit,
     onAddATrip:() -> Unit,
+    onAddPlace:() -> Unit,
+    onAddExpense:() -> Unit,
+    onAddPhoto:() -> Unit,
+    onViewAllTrips:() -> Unit,
+    onViewWeather:() -> Unit,
 
 ) {
     Column(
@@ -51,16 +52,31 @@ fun HomeScreen(
             .padding(24.dp),
     ) {
 
-        Image(
-            painter = painterResource(
-                id = com.example.smart_trip.R.drawable.logo_smarttrip
-            ),
-            contentDescription = "Logo SmartTrip",
-            modifier = Modifier
-                .align(Alignment.Start)
-                .height(50.dp),
-            contentScale = ContentScale.Fit
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(
+                    id = com.example.smart_trip.R.drawable.logo_smarttrip
+                ),
+                contentDescription = "Logo SmartTrip",
+                modifier = Modifier
+                    .height(50.dp),
+                contentScale = ContentScale.Fit
+            )
+            Image(
+                painter = painterResource(
+                    id = com.example.smart_trip.R.drawable.notification_picto
+                ),
+                contentDescription = "Notifications",
+                modifier = Modifier
+                    .height(30.dp),
+                contentScale = ContentScale.Fit
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Bonjour Lucie !",
@@ -89,15 +105,13 @@ fun HomeScreen(
 
 
             )
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Turquoise
-                )
-
+            TextButton(
+                onClick = { onViewAllTrips() }
             ) {
-                Text("Voir tout >")
+                Text(
+                    text = "Voir tout >",
+                    color = Turquoise
+                )
             }
 
         }
@@ -247,17 +261,14 @@ fun HomeScreen(
 
 
             )
-            Button(
-                onClick = {},
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Turquoise
-                )
-
+            TextButton(
+                onClick = { onViewWeather() }
             ) {
-                Text("Voir plus >")
+                Text(
+                    text = "Voir plus >",
+                    color = Turquoise
+                )
             }
-
         }
 
         Row(
@@ -388,7 +399,7 @@ fun HomeScreen(
                     .height(100.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(color = PaleBlue2)
-                    .clickable { onAddATrip()}
+                    .clickable { onAddPlace()}
                     .padding(horizontal = 4.dp, vertical = 8.dp)
             ) {
                 Icon(
@@ -415,7 +426,7 @@ fun HomeScreen(
                     .height(100.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(color = PaleOrange)
-                    .clickable { onAddATrip()}
+                    .clickable { onAddExpense()}
                     .padding(horizontal = 4.dp, vertical = 8.dp)
             ) {
                 Image(
@@ -444,7 +455,7 @@ fun HomeScreen(
                     .height(100.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(color = PalePurple)
-                    .clickable { onAddATrip()}
+                    .clickable { onAddPhoto()}
                     .padding(horizontal = 4.dp, vertical = 8.dp)
             ) {
                 Image(
@@ -471,19 +482,6 @@ fun HomeScreen(
             modifier = Modifier.height(16.dp)
         )
 
-
-
-        Button(
-            onClick = onAddATrip,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Turquoise,
-                contentColor = Color.White
-
-            )
-
-        ) {
-            Text("Ajouter un Voyage")
-        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -493,20 +491,78 @@ fun HomeScreen(
                 text = "Mes voyages",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
-
-
             )
+            TextButton(
+                onClick = { onViewAllTrips() }
+            ) {
+                Text(
+                    text = "Voir tout >",
+                    color = Turquoise
+                )
+            }
+
+
         }
 
-        Button(
-            onClick = onBackCLick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Turquoise,
-                contentColor = Color.White
-            )
-
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(65.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color.White)
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Revenir au début")
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(
+                        id = com.example.smart_trip.R.drawable.lisbonne
+                    ),
+
+                    contentDescription = "Mes voyages",
+                    modifier = Modifier
+                        .height(60.dp)
+                        .clip(
+                            RoundedCornerShape(
+                            topStart = 10.dp,
+                            bottomStart = 10.dp,
+                            )
+                        )
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "Lisbonne",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 24.sp
+                    )
+
+                    Text(
+                        text = "4 déc. -> 8 déc. 2026",
+                        fontSize = 16.sp,
+                        lineHeight = 14.sp
+                    )
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = ">",
+                    fontSize = 32.sp,
+                    lineHeight = 20.sp
+
+                )
+            }
         }
 
     }
