@@ -127,16 +127,35 @@ fun AppNavGraph() {
                     mutableStateOf("")
                 }
 
+                var startDatePickerValue by rememberSaveable {
+                    mutableStateOf("")
+                }
+
+                var endDatePickerValue by rememberSaveable {
+                    mutableStateOf("")
+                }
+
                 AddATripScreen(
                     destination = destination,
                     onDestinationChange = {
                         destination = it
+                    },
+                    startDatePickerValue = startDatePickerValue,
+                    onStartDateChange = {
+                        startDatePickerValue = it
+                    },
+                    endDatePickerValue = endDatePickerValue,
+                    onEndDateChange = {
+                        endDatePickerValue = it
                     },
                     budget = budget,
                     onBudgetChange = {
                         budget = it
                     },
                     onSubmit = {
+                        navController.popBackStack()
+                    },
+                    onBackClick = {
                         navController.popBackStack()
                     }
                 )
