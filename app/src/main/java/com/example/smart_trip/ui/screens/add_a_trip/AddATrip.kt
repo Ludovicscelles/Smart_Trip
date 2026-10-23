@@ -1,5 +1,7 @@
 package com.example.smart_trip.ui.screens.add_a_trip
 
+import com.example.smart_trip.ui.components.TripDatePicker
+
 import androidx.compose.foundation.Image
 import  androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,8 +37,8 @@ import com.example.smart_trip.ui.theme.Turquoise
 import com.example.smart_trip.ui.theme.PaleGray
 import androidx.compose.ui.graphics.Color
 
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @Composable
@@ -57,6 +59,31 @@ fun AddATripScreen(
     onBackClick: () -> Unit
 
 ) {
+
+    // Validation du formulaire
+
+    val dateFormat = SimpleDateFormat(
+        "dd/MM/yyyy",
+        Locale.FRANCE
+    ).apply {
+        isLenient = false
+    }
+
+    val startDate = runCatching {
+        dateFormat.parse(startDatePickerValue)
+    }.getOrNull()
+
+    val endDate = runCatching {
+        dateFormat.parse(endDatePickerValue)
+    }.getOrNull()
+
+    val isFormValid =
+        destination.isNotBlank() &&
+                startDate != null &&
+                endDate != null &&
+                endDate.after(startDate)
+                && ( budget.toDoubleOrNull()?.let { it > 0 } == true)
+
 
     Column(
         modifier = Modifier
@@ -206,57 +233,17 @@ fun AddATripScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                OutlinedTextField(
+                TripDatePicker(
                     value = startDatePickerValue,
-                    onValueChange = onStartDateChange,
-                    placeholder = {
-                        Text(
-                            text = "Date du début",
-                            color = Color.Gray
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.CalendarToday,
-                            contentDescription = "Calendrier début",
-                            modifier = Modifier.size(20.dp),
-                            tint = Color.Gray
-                        )
-                    },
-                    modifier = Modifier
-                        .weight(1f),
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Turquoise,
-                        unfocusedBorderColor = Color.Gray,
-                    )
+                    onDateSelected = onStartDateChange,
+                    placeholder = "Date de début",
+                    modifier = Modifier.weight(1f)
                 )
-                OutlinedTextField(
+                TripDatePicker(
                     value = endDatePickerValue,
-                    onValueChange = onEndDateChange,
-                    placeholder = {
-                        Text(
-                            text = "Date de fin",
-                            color = Color.Gray
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.CalendarToday,
-                            contentDescription = "Calendrier fin",
-                            modifier = Modifier.size(20.dp),
-                            tint = Color.Gray
-                        )
-                    },
-                    modifier = Modifier
-                        .weight(1f),
-                    singleLine = true,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Turquoise,
-                        unfocusedBorderColor = Color.Gray,
-                    )
+                    onDateSelected = onEndDateChange,
+                    placeholder = "Date de fin",
+                    modifier = Modifier.weight(1f)
                 )
             }
 
@@ -432,11 +419,6 @@ fun AddATripScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            val isFormValid =
-                destination.isNotBlank() &&
-                startDatePickerValue.isNotBlank() &&
-                endDatePickerValue.isNotBlank()
-                && ( budget.toDoubleOrNull()?.let { it > 0 } == true)
 
 
             // Bouton de création du voyage

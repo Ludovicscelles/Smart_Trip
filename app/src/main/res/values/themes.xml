@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Thème principale de l'application -->
     <style name="Theme.Smart_Trip" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Thème personalisé du DatePicker -->
+    <style name="Theme.DatePicker"
+        parent="android:style/Theme.Material.Light.Dialog.Alert" >
+
+        <item name="android:colorAccent">#087F8C</item>
+
+    </style>
+
 </resources>
