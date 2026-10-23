@@ -135,6 +135,14 @@ fun AppNavGraph() {
                     mutableStateOf("")
                 }
 
+                var selectedTravelType by rememberSaveable {
+                    mutableStateOf("")
+                }
+
+                var notes by rememberSaveable {
+                    mutableStateOf("")
+                }
+
                 AddATripScreen(
                     destination = destination,
                     onDestinationChange = {
@@ -148,9 +156,17 @@ fun AppNavGraph() {
                     onEndDateChange = {
                         endDatePickerValue = it
                     },
+                    selectedTravelType = selectedTravelType,
+                    onTravelTypeChange = {
+                        selectedTravelType = it
+                    },
                     budget = budget,
                     onBudgetChange = {
                         budget = it
+                    },
+                    notes = notes,
+                    onNotesChange = {
+                        notes = it
                     },
                     onSubmit = {
                         navController.popBackStack()
