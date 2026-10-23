@@ -1,13 +1,13 @@
 package com.example.smart_trip.ui.screens.add_a_trip
 
-import androidx.collection.emptyLongSet
 import androidx.compose.foundation.Image
 import  androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,10 +22,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.AccountBalanceWallet
-import androidx.compose.material.icons.outlined.Flight
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,7 +39,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 
 
-
 @Composable
 fun AddATripScreen(
     destination: String,
@@ -50,16 +49,23 @@ fun AddATripScreen(
     onEndDateChange: (String) -> Unit,
     budget: String,
     onBudgetChange: (String) -> Unit,
+    selectedTravelType: String,
+    onTravelTypeChange: (String) -> Unit,
+    notes: String,
+    onNotesChange: (String) -> Unit,
     onSubmit: () -> Unit,
     onBackClick: () -> Unit
 
 ) {
 
-    var selectedTravelType by rememberSaveable { mutableStateOf("Loisir") }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(PaleGray)
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+
     ) {
         Box(
             modifier = Modifier
@@ -124,7 +130,7 @@ fun AddATripScreen(
                 .offset(y = (-40).dp)
                 .clip(RoundedCornerShape(15.dp))
                 .background(PaleGray)
-                .padding(16.dp),
+                .padding(26.dp),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
 
@@ -165,21 +171,16 @@ fun AddATripScreen(
                     )
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.5.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
+                    .fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Turquoise,
+                    unfocusedBorderColor = Color.Gray,
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Dates du voyage
             Row(
@@ -223,17 +224,12 @@ fun AddATripScreen(
                         )
                     },
                     modifier = Modifier
-                        .weight(1f)
-                        .border(
-                            width = 1.5.dp,
-                            color = Color.Gray,
-                            shape = RoundedCornerShape(10.dp)
-                        ),
+                        .weight(1f),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
+                        focusedBorderColor = Turquoise,
+                        unfocusedBorderColor = Color.Gray,
                     )
                 )
                 OutlinedTextField(
@@ -254,22 +250,17 @@ fun AddATripScreen(
                         )
                     },
                     modifier = Modifier
-                        .weight(1f)
-                        .border(
-                            width = 1.5.dp,
-                            color = Color.Gray,
-                            shape = RoundedCornerShape(10.dp)
-                        ),
+                        .weight(1f),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
+                        focusedBorderColor = Turquoise,
+                        unfocusedBorderColor = Color.Gray,
                     )
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Budget estimé
             Row(
@@ -294,6 +285,9 @@ fun AddATripScreen(
             OutlinedTextField(
                 value = budget,
                 onValueChange = onBudgetChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal
+                ),
                 placeholder = {
                     Text(
                         text = "Ex. 1200",
@@ -310,21 +304,16 @@ fun AddATripScreen(
                     )
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.5.dp,
-                        color = Color.Gray,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
+                    .fillMaxWidth(),
                 singleLine = true,
                 shape = RoundedCornerShape(10.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
+                    focusedBorderColor = Turquoise,
+                    unfocusedBorderColor = Color.Gray,
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
 
 
@@ -347,6 +336,7 @@ fun AddATripScreen(
                 )
 
             }
+
             Spacer(modifier = Modifier.height(8.dp))
 
 
@@ -360,7 +350,7 @@ fun AddATripScreen(
                     val isSelected = selectedTravelType == type
                    Button(
                        onClick = {
-                           selectedTravelType = type
+                           onTravelTypeChange(type)
                        },
                        modifier = Modifier.weight(1f),
                        shape = RoundedCornerShape(12.dp),
@@ -388,19 +378,85 @@ fun AddATripScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
 
 
+            // Notes du voyage
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.StickyNote2,
+                    contentDescription = "Icon notes",
+                    modifier = Modifier.size(30.dp),
+                    tint = Color.Black
+                )
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            append("Notes")
+                        }
+                        append(" (facultatif)")
+                    },
+                    fontSize = 14.sp,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = notes,
+                onValueChange = onNotesChange,
+                placeholder = {
+                    Text(
+                        text = "Ajouter des informations supplémentaires ...",
+                        color = Color.Gray
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                singleLine = false,
+                minLines = 3,
+                maxLines = 5,
+                shape = RoundedCornerShape(10.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Gray,
+                    unfocusedBorderColor = Color.Gray,
+                )
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            val isFormValid =
+                destination.isNotBlank() &&
+                startDatePickerValue.isNotBlank() &&
+                endDatePickerValue.isNotBlank()
+                && ( budget.toDoubleOrNull()?.let { it > 0 } == true)
+
+
+            // Bouton de création du voyage
             Button(
                 onClick = onSubmit,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Turquoise,
                     contentColor = Color.White
                 ),
-                modifier = Modifier.fillMaxWidth(),
-                enabled = destination.isNotBlank()
-                        && budget.isNotBlank()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(65.dp),
+                shape = RoundedCornerShape(15.dp),
+                enabled = isFormValid
             ) {
-                Text("Créer le voyage")
+                Text(
+                    text = "Créer le voyage",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
