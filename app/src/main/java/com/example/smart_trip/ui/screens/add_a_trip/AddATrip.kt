@@ -77,12 +77,17 @@ fun AddATripScreen(
         dateFormat.parse(endDatePickerValue)
     }.getOrNull()
 
+    val validBudget = budget
+        .replace(",", ".")
+        .toDoubleOrNull()
+        ?.let { it.isFinite() && it > 0 } == true
+
     val isFormValid =
         destination.isNotBlank() &&
                 startDate != null &&
                 endDate != null &&
                 endDate.after(startDate)
-                && ( budget.toDoubleOrNull()?.let { it > 0 } == true)
+                && validBudget
 
 
     Column(
@@ -153,7 +158,7 @@ fun AddATripScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .offset(y = (-40).dp)
                 .clip(RoundedCornerShape(15.dp))
                 .background(PaleGray)
