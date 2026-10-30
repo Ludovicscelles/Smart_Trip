@@ -40,6 +40,7 @@ fun HomeScreen(
     onAddPlace:() -> Unit,
     onAddExpense:() -> Unit,
     onAddPhoto:() -> Unit,
+    onViewDetailTrip:() -> Unit,
     onViewAllTrips:() -> Unit,
     onViewWeather:() -> Unit,
 
@@ -106,7 +107,7 @@ fun HomeScreen(
 
             )
             TextButton(
-                onClick = { onViewAllTrips() }
+                onClick = { onViewDetailTrip() }
             ) {
                 Text(
                     text = "Voir tout >",
