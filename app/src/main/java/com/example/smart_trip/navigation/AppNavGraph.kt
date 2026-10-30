@@ -18,6 +18,7 @@ import com.example.smart_trip.components.SmartTripFooter
 import com.example.smart_trip.ui.screens.home.HomeScreen
 import com.example.smart_trip.IntroScreen
 import com.example.smart_trip.ui.screens.add_a_trip.AddATripScreen
+import com.example.smart_trip.ui.screens.trip_detail.TripDetailScreen
 
 @Composable
 fun AppNavGraph() {
@@ -107,6 +108,9 @@ fun AppNavGraph() {
                     onAddPhoto = {
                         navController.navigate("newPhoto")
                     },
+                    onViewDetailTrip = {
+                        navController.navigate("tripDetail")
+                    },
                     onViewAllTrips = {
                         navController.navigate("allTrips")
                     },
@@ -115,6 +119,16 @@ fun AppNavGraph() {
                     }
                 )
             }
+
+            // DETAIL D'UN VOYAGE
+            composable("tripDetail") {
+                TripDetailScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
 
             // CRÉER UN VOYAGE
             composable("newTrip") {
