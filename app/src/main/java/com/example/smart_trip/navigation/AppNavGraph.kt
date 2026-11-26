@@ -19,6 +19,7 @@ import com.example.smart_trip.ui.screens.home.HomeScreen
 import com.example.smart_trip.ui.screens.add_a_trip.AddATripScreen
 import com.example.smart_trip.ui.screens.intro.IntroScreen
 import com.example.smart_trip.ui.screens.trip_detail.TripDetailScreen
+import com.example.smart_trip.ui.screens.weather.WeatherRoute
 
 
 @Composable
@@ -61,12 +62,17 @@ fun AppNavGraph() {
                         }
 
                         route?.let { destination ->
-                            navController.navigate(destination) {
-                                popUpTo("home") {
-                                    saveState = true
+                            if (destination == "home") {
+                                // C'est ce bloc qui remplace l'ancien navController.navigate
+                                navController.popBackStack("home", inclusive = false)
+                            } else {
+                                navController.navigate(destination) {
+                                    popUpTo("home") {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
                             }
                         }
                     }
@@ -214,7 +220,11 @@ fun AppNavGraph() {
 
             // MÉTÉO
             composable("weather") {
-                Text("Météo")
+                WeatherRoute(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             // ONGLET VOYAGES
