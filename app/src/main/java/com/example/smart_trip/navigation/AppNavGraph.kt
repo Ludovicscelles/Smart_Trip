@@ -16,9 +16,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 
 import com.example.smart_trip.components.SmartTripFooter
 import com.example.smart_trip.ui.screens.home.HomeScreen
-import com.example.smart_trip.IntroScreen
 import com.example.smart_trip.ui.screens.add_a_trip.AddATripScreen
+import com.example.smart_trip.ui.screens.intro.IntroScreen
 import com.example.smart_trip.ui.screens.trip_detail.TripDetailScreen
+
 
 @Composable
 fun AppNavGraph() {
