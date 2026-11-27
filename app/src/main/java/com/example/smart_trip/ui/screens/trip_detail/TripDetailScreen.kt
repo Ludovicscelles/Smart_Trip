@@ -28,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 
-import com.example.smart_trip.R
 import com.example.smart_trip.ui.theme.PaleGray
 import com.example.smart_trip.ui.theme.Turquoise
 import androidx.compose.ui.unit.dp
@@ -41,6 +40,7 @@ import com.example.smart_trip.ui.components.TripDetailTopAppBar
 import com.example.smart_trip.ui.components.TripOverviewCard
 import com.example.smart_trip.ui.components.TripDatesCard
 import com.example.smart_trip.ui.components.CurrentWeatherGeneralCard
+import com.example.smart_trip.ui.components.FormatDateRange
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -63,6 +63,11 @@ fun TripDetailScreen (
         Text("Voyage introuvable")
         return
     }
+
+    val (formattedStartDate, formattedEndDate) = FormatDateRange(
+        startDate = trip.startDate,
+        endDate = trip.endDate
+    )
 
     val imageHeight = 280.dp
     val cardOverlap = 24.dp
@@ -125,7 +130,7 @@ fun TripDetailScreen (
                             fontSize = 40.sp
                         )
                         Text(
-                            text = "${trip.startDate}-> ${trip.endDate}",
+                            text = "${formattedStartDate}-> ${formattedEndDate}",
                             color = Color.White,
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
