@@ -1,6 +1,8 @@
 
 package com.example.smart_trip.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -8,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 
 import com.example.smart_trip.components.SmartTripFooter
 import com.example.smart_trip.ui.screens.home.HomeScreen
@@ -22,8 +26,30 @@ import com.example.smart_trip.ui.screens.trip_detail.TripDetailScreen
 import com.example.smart_trip.ui.screens.weather.WeatherRoute
 
 
+object Routes {
+    const val INTRO = "intro"
+    const val HOME = "home"
+    const val ADD_A_TRIP = "addATrip"
+    const val TRIP_DETAIL = "tripDetail/{tripId}"
+    const val NEW_TRIP = "newTrip"
+    const val NEW_PLACE = "newPlace"
+    const val NEW_EXPENSE = "newExpense"
+    const val NEW_PHOTO = "newPhoto"
+    const val ALL_TRIPS = "allTrips"
+    const val WEATHER = "weather"
+    const val VOYAGES = "voyages"
+    const val PARAMETRES = "parametres"
+
+    fun tripDetail(tripId: Long) = "tripDetail/$tripId"
+
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph() {
+
+
 
     val navController = rememberNavController()
 
@@ -39,9 +65,9 @@ fun AppNavGraph() {
 
     // Onglet sélectionné dans le footer
     val selectedItem = when (currentRoute) {
-        "home" -> 0
-        "voyages", "allTrips", "newTrip" -> 1
-        "parametres" -> 2
+        Routes.HOME -> 0
+        Routes.VOYAGES, Routes.ALL_TRIPS, Routes.NEW_TRIP -> 1
+        Routes.PARAMETRES -> 2
         else -> -1
     }
 
@@ -55,9 +81,9 @@ fun AppNavGraph() {
                     onItemSelected = { index ->
 
                         val route = when (index) {
-                            0 -> "home"
-                            1 -> "voyages"
-                            2 -> "parametres"
+                            0 -> Routes.HOME
+                            1 -> Routes.VOYAGES
+                            2 -> Routes.PARAMETRES
                             else -> null
                         }
 
@@ -83,7 +109,7 @@ fun AppNavGraph() {
 
         NavHost(
             navController = navController,
-            startDestination = "intro",
+            startDestination = Routes.INTRO,
             modifier = Modifier.padding(innerPadding)
         ) {
 
@@ -91,7 +117,7 @@ fun AppNavGraph() {
             composable("intro") {
                 IntroScreen(
                     onMesVoyagesClick = {
-                        navController.navigate("home") {
+                        navController.navigate(Routes.HOME) {
                             popUpTo("intro") {
                                 inclusive = true
                             }
@@ -101,35 +127,49 @@ fun AppNavGraph() {
             }
 
             // ACCUEIL
-            composable("home") {
+            composable(Routes.HOME) {
                 HomeScreen(
                     onAddATrip = {
-                        navController.navigate("newTrip")
+                        navController.navigate(Routes.NEW_TRIP)
                     },
                     onAddPlace = {
-                        navController.navigate("newPlace")
+                        navController.navigate(Routes.NEW_PLACE)
                     },
                     onAddExpense = {
-                        navController.navigate("newExpense")
+                        navController.navigate(Routes.NEW_EXPENSE)
                     },
                     onAddPhoto = {
-                        navController.navigate("newPhoto")
+                        navController.navigate(Routes.NEW_PHOTO)
                     },
-                    onViewDetailTrip = {
-                        navController.navigate("tripDetail")
+                    onViewDetailTrip = { tripId ->
+                        navController.navigate(Routes.tripDetail(tripId))
                     },
                     onViewAllTrips = {
-                        navController.navigate("allTrips")
+                        navController.navigate(Routes.ALL_TRIPS)
                     },
                     onViewWeather = {
-                        navController.navigate("weather")
+                        navController.navigate(Routes.WEATHER)
                     }
                 )
             }
 
             // DETAIL D'UN VOYAGE
-            composable("tripDetail") {
+            composable (
+                Routes.TRIP_DETAIL,
+                arguments = listOf(
+                    navArgument("tripId") {
+                        type = NavType.LongType
+                    }
+                )
+
+            ) { backStackEntry ->
+
+                val tripId = backStackEntry.arguments
+                    ?.getLong("tripId")
+                    ?: return@composable
+
                 TripDetailScreen(
+                    tripId = tripId,
                     onBackClick = {
                         navController.popBackStack()
                     }
@@ -138,7 +178,7 @@ fun AppNavGraph() {
 
 
             // CRÉER UN VOYAGE
-            composable("newTrip") {
+            composable(Routes.NEW_TRIP) {
 
                 var destination by rememberSaveable {
                     mutableStateOf("")
@@ -199,27 +239,27 @@ fun AppNavGraph() {
             }
 
             // AJOUTER UN LIEU
-            composable("newPlace") {
+            composable(Routes.NEW_PLACE) {
                 Text("Ajouter un lieu")
             }
 
             // AJOUTER UNE DÉPENSE
-            composable("newExpense") {
+            composable(Routes.NEW_EXPENSE) {
                 Text("Ajouter une dépense")
             }
 
             // AJOUTER UNE PHOTO
-            composable("newPhoto") {
+            composable(Routes.NEW_PHOTO) {
                 Text("Ajouter une photo")
             }
 
             // LISTE DES VOYAGES
-            composable("allTrips") {
+            composable(Routes.ALL_TRIPS) {
                 Text("Tous mes voyages")
             }
 
             // MÉTÉO
-            composable("weather") {
+            composable(Routes.WEATHER) {
                 WeatherRoute(
                     onBackClick = {
                         navController.popBackStack()
@@ -228,12 +268,12 @@ fun AppNavGraph() {
             }
 
             // ONGLET VOYAGES
-            composable("voyages") {
+            composable(Routes.VOYAGES) {
                 Text("Page Voyages")
             }
 
             // ONGLET PARAMÈTRES
-            composable("parametres") {
+            composable(Routes.PARAMETRES) {
                 Text("Page paramètres")
             }
         }

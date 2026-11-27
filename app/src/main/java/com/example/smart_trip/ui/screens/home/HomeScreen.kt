@@ -1,5 +1,7 @@
 package com.example.smart_trip.ui.screens.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import  androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -32,19 +34,27 @@ import com.example.smart_trip.ui.theme.PaleYellow
 import com.example.smart_trip.ui.theme.PaleOrange
 import com.example.smart_trip.ui.theme.PalePurple
 import com.example.smart_trip.ui.theme.PaleBlue2
+import com.example.smart_trip.R.drawable.logo_smarttrip
+import com.example.smart_trip.R.drawable.notification_picto
+import com.example.smart_trip.data.trips
 
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     onAddATrip:() -> Unit,
     onAddPlace:() -> Unit,
     onAddExpense:() -> Unit,
     onAddPhoto:() -> Unit,
-    onViewDetailTrip:() -> Unit,
+    onViewDetailTrip:(Long) -> Unit,
     onViewAllTrips:() -> Unit,
     onViewWeather:() -> Unit,
 
 ) {
+
+    val trip = trips[0]
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +70,7 @@ fun HomeScreen(
         ) {
             Image(
                 painter = painterResource(
-                    id = com.example.smart_trip.R.drawable.logo_smarttrip
+                    id = logo_smarttrip
                 ),
                 contentDescription = "Logo SmartTrip",
                 modifier = Modifier
@@ -69,7 +79,7 @@ fun HomeScreen(
             )
             Image(
                 painter = painterResource(
-                    id = com.example.smart_trip.R.drawable.notification_picto
+                    id = notification_picto
                 ),
                 contentDescription = "Notifications",
                 modifier = Modifier
@@ -107,7 +117,7 @@ fun HomeScreen(
 
             )
             TextButton(
-                onClick = { onViewDetailTrip() }
+                onClick = { onViewDetailTrip(trip.id) }
             ) {
                 Text(
                     text = "Voir tout >",
